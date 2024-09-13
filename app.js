@@ -6,12 +6,13 @@ const app = express();
 const port = 9000;
 app.use(cors());
 
-app.get("/pdfgn/download/:filename", async (req, res) => {
+app.get("/pdfgnjob/download/:filename/:query", async (req, res) => {
     try {
         let filename = req.params.filename;
+        let query = req.params.query;
+        
         // Execute the function
         // Launch Puppeteer Core with the specified executable path and headless mode set to false
-
         const browser = await puppeteerCore.connect({
             browserWSEndpoint:
                 "wss://cranky-stonebraker-yf01bsczof.liara.run?token=f8SQ43ERLf6f8KuNRcuw",
@@ -34,10 +35,10 @@ app.get("/pdfgn/download/:filename", async (req, res) => {
         // await page.emulateMediaType("screen");
 
         // Navigate to the specified URL
-        await page.goto(
-            `https://jobonet.ir/my/job-analysis?t=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyNDMzMTQ3NCwiZXhwIjoxNzI0NDE3ODc0fQ.kL8XQV3-XMRbno-rmxkWf3c058hzQoEzqMgp4_AjJoY&id=3&step=finish`,
-            { waitUntil: "networkidle0", timeout: 0 } // 200 seconds timeout
-        );
+        await page.goto("https://jobonet.ir/my/job-analysis?" + query, {
+            waitUntil: "networkidle0",
+            timeout: 0,
+        }); // 200 seconds timeout
 
         // await page.addStyleTag({ content: 'body { margin-right: -1000px; }' });
 
