@@ -14,10 +14,19 @@ app.get("/pdfgnjob/download/:filename/:query", async (req, res) => {
 
         const browser = await puppeteer.launch({
             headless: "new",
-            args: ["--no-sandbox", "--disable-setuid-sandbox"]
+            executablePath: "/usr/bin/chromium",
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-software-rasterizer"
+            ]
         });
 
         const page = await browser.newPage();
+        page.setDefaultNavigationTimeout(0);
+        page.setDefaultTimeout(0);
 
         await page.goto("https://jobonet.ir/my/job-analysis?" + query, {
             waitUntil: "networkidle0",
@@ -29,6 +38,8 @@ app.get("/pdfgnjob/download/:filename/:query", async (req, res) => {
             landscape: false,
             width: "990px",
             height: "1404px",
+            timeout: 0,
+
         });
 
         await browser.close();
